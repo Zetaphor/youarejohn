@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  cuda_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: ["gpu"]
+    cap_add:
+      - SYS_RESOURCE
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app
+      - /home/zetaphor/LLMs/:/models
+    environment:
+      USE_MLOCK: "0"
+      HOST: "0.0.0.0"
+      CUDA_DOCKER_ARCH: "all"
+      LLAMA_CUBLAS: "1"
+
+    # entrypoint: ["/bin/bash", "-c"]
+    # command: ["python3 /app/test2.py"]
+    # entrypoint: ["/bin/sh"]
+    tty: true
+    stdin_open: true
+    command: ["/bin/sh"]
