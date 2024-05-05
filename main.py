@@ -13,7 +13,6 @@ GPU_LAYERS = -1 if os.environ.get("USE_GPU", "").lower() == "true" else 0
 try:
     print('------STARTING MODEL------')
     system_prompt = open("system_prompt.txt", "r").read()
-    grammar_json = open("json.gbnf", "r").read()
     models = {
         "llama3": {
             "chat_format": "llama-3",
