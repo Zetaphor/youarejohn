@@ -26,7 +26,8 @@ try:
         }
     }
     model = models["phi3"]
-    llm = Llama(model["file"], n_gpu_layers=GPU_LAYERS, chat_format=model["chat_format"], n_ctx=model["context_length"])
+    llm = Llama(model["file"], n_gpu_layers=GPU_LAYERS, chat_format=model["chat_format"], n_ctx=model["context_length"], flash_attn=True)
+
 except Exception as e:
     abort(500, description=str(e))
 
