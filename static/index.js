@@ -67,7 +67,9 @@ function submitInput() {
   const eventInput = inputField.value.trim();
 
   if (eventInput.length > 0) {
-    addLogEntry(eventInput);  // Initially add the entry with placeholders
+    const unixtime = Date.now();
+    console.log(unixtime);
+    addLogEntry(unixtime, eventInput);  // Initially add the entry with placeholders
     fetch('/simulate', {
       method: 'POST',
       headers: {
@@ -77,7 +79,7 @@ function submitInput() {
     })
       .then(response => response.json())
       .then(data => {
-        updateLogEntry(data.event_description, data.inner_thoughts, data.mood);
+        updateLogEntry(unixtime, data);
         updateAttribute(data.affected_attribute, data.amount);
       })
       .catch(error => {
@@ -88,10 +90,12 @@ function submitInput() {
   }
 }
 
-function addLogEntry(eventInput) {
+function addLogEntry(id, eventInput) {
   const table = document.getElementById("logTable");
 
   let summaryRow = document.createElement("tr");
+  summaryRow.id = `summary-${id}`;
+  summaryRow.style.position = "relative";
   let summaryCell = document.createElement("td");
   summaryCell.setAttribute("colspan", "2");
   summaryCell.textContent = `John ${eventInput}`;
@@ -117,11 +121,37 @@ function addLogEntry(eventInput) {
   moodElement.textContent = "Determining...";  // Placeholder mood text
 }
 
-function updateLogEntry(eventDescription, innerThoughts, mood) {
+function updateLogEntry(unixtime, data) {
+  const summaryRow = document.getElementById("summary-" + unixtime);
+  const attributeChangeContainer = document.createElement("div");
+  attributeChangeContainer.classList.add("absolute", "top-0", "right-0", "py-3");
+  attributeChangeContainer.style.display = "flex";
+  imgAttributeType = document.createElement("img");
+  imgAttributeType.src = "/static/img/icon_" + data.affected_attribute + ".png";
+  imgAttributeType.classList.add("w-8", "h-8", "mr-1");
+  const amountSpan = document.createElement("span");
+
+  let positiveChange = data.amount > 0;
+  if (data.affected_attribute === "hunger") positiveChange = !positiveChange;
+
+  if (!positiveChange) {
+    amountSpan.style.color = "#FFFFFF";
+    amountSpan.style.backgroundColor = "#FF0000";
+  } else {
+    amountSpan.style.color = "#000000";
+    amountSpan.style.backgroundColor = "#00FF00";
+  }
+  amountSpan.classList.add("px-2", "py-1", "rounded-lg", "text-md", "font-bold", "text-center");
+  amountSpan.textContent = (data.amount > 0) ? `+${data.amount}` : data.amount;
+  attributeChangeContainer.appendChild(imgAttributeType);
+  attributeChangeContainer.appendChild(amountSpan);
+  summaryRow.appendChild(attributeChangeContainer);
+
+
   const eventCells = document.querySelectorAll("#logTable td");
-  eventCells[eventCells.length - 2].textContent = eventDescription;  // Update the last event cell
-  eventCells[eventCells.length - 1].textContent = innerThoughts;     // Update the last thoughts cell
-  moodElement.textContent = mood;
+  eventCells[eventCells.length - 2].textContent = data.event_description;  // Update the last event cell
+  eventCells[eventCells.length - 1].textContent = data.inner_thoughts;     // Update the last thoughts cell
+  moodElement.textContent = data.mood;
 }
 
 updateAttribute("hunger", 0);
