@@ -100,13 +100,14 @@ function addLogEntry(eventInput) {
   table.appendChild(summaryRow);
 
   let detailRow = document.createElement("tr");
+  detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400");
   let eventCell = document.createElement("td");
   let thoughtsCell = document.createElement("td");
 
   eventCell.textContent = "Loading...";
   thoughtsCell.textContent = "Loading...";
 
-  eventCell.classList.add("p-4", "border-gray-200", "border-r", "border-gray-400");
+  eventCell.classList.add("p-4");
   thoughtsCell.classList.add("p-4");
 
   detailRow.appendChild(eventCell);
