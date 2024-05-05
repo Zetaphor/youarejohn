@@ -17,7 +17,10 @@ RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
 
 WORKDIR /app
 
+COPY requirements.txt /app
+
+RUN pip install -r /app/requirements.txt
+
 # CMD ["/bin/bash"]
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 EXPOSE 8000
