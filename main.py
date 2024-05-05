@@ -1,10 +1,17 @@
-from fastapi import FastAPI, HTTPException
-from llama_cpp.llama import Llama, LlamaGrammar
+from flask import Flask, request, jsonify, send_from_directory, abort
+from llama_cpp.llama import Llama
 import json
+import os
+from dotenv import load_dotenv
 
-app = FastAPI()
+load_dotenv()
+
+app = Flask(__name__)
+
+GPU_LAYERS = -1 if os.environ.get("USE_GPU", "").lower() == "true" else 0
 
 try:
+    print('------STARTING MODEL------')
     system_prompt = open("system_prompt.txt", "r").read()
     grammar_json = open("json.gbnf", "r").read()
     models = {
@@ -20,20 +27,18 @@ try:
         }
     }
     model = models["phi3"]
-    llm = Llama(model["file"], n_gpu_layers=-1, chat_format=model["chat_format"], n_ctx=model["context_length"])
+    llm = Llama(model["file"], n_gpu_layers=GPU_LAYERS, chat_format=model["chat_format"], n_ctx=model["context_length"])
 except Exception as e:
-    raise HTTPException(status_code=500, detail=str(e))
+    abort(500, description=str(e))
 
-@app.post("/simulate/")
-async def simulate(user_input: str):
+@app.route('/simulate/', methods=['POST'])
+def simulate():
+    user_input = request.json.get('event')
     try:
         response = llm.create_chat_completion(
             messages=[
-                {
-                    "role": "system",
-                    "content": system_prompt,
-                },
-                {"role": "user", "content": user_input},
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_input}
             ],
             response_format={
                 "type": "json_object",
@@ -52,10 +57,13 @@ async def simulate(user_input: str):
             temperature=0.7,
         )
         content = json.loads(response['choices'][0]['message']['content'])
-        return content
+        return jsonify(content)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        abort(500, description=str(e))
+
+@app.route('/')
+def index():
+    return send_from_directory('static', 'index.html')
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    app.run(host='0.0.0.0', port=8000, debug=False)

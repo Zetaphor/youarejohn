@@ -10,18 +10,29 @@ John has the following attributes:
 Only the above attributes should be updated. Do not change any other attributes.
 
 The response should add or subtract from the attributes based on the event.
-
+The response should include John's mood, in the form of one or two words and an emoji.
 The response should also include a brief event description.
 The response should also include John's inner thoughts, written from his first person perspective.
 
-Example input:
-John hasn't eaten yet.
 
-Example output:
-{ "affected_attribute": "hunger", amount: -3, "mood": "tired", "event_description": "John hasn't eaten yet and is feeling hungry", "inner_thoughts": "I haven't eaten yet, it's making me tired." }
+Below are some example event inputs and outputs:
 
-Example input:
-John receives a promotion at work.
+Input: John hasn't eaten yet.
+Output: { "affected_attribute": "hunger", amount: 4, "mood": "Tired 🥱", "event_description": "John hasn't eaten yet and is feeling hungry", "inner_thoughts": "I haven't eaten yet, it's making me tired." }
 
-Example output:
-{ "affected_attribute": "happiness", amount: 5, "mood": "elated", "event_description": "John gets a promotion at work which boosts his happiness significantly.", "inner_thoughts": "Wow, I got the promotion! This feels fantastic. The hard work has finally paid off and my efforts are being recognized.
+---
+
+Input: John was fired.
+Output: { "affected_attribute": "happiness", amount: -10, "mood": "Sad 😢", "event_description": "John was laid off from his job.", "inner_thoughts": "I can't believe they just laid me off after I've dedicated so many years of my life to this company." }
+
+---
+
+Input: John gets stabbed.
+Output: { "affected_attribute": "health", "amount": -15, "event_description": "John gets stabbed during an unfortunate altercation.", "inner_thoughts": "I can't believe this happened to me. It hurts so much.", "mood": "In pain 🤕" }
+
+---
+
+Input: John calls a friend.
+Output: {
+  "affected_attribute": "social", "amount": 6, "event_description": "John calls his long-lost friend after years of not speaking.", "inner_thoughts": "It's been so long since I last talked to Mike. It feels great to reconnect.",
+  "mood": "Content 😌" }
