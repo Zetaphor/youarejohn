@@ -41,7 +41,6 @@ function updateAttribute(attribute, value) {
   else if (newValue > 100) newValue = 100;
   element.textContent = newValue;
   let flipColors = false;
-  if (attribute === "hunger") flipColors = true;
   let bgColor = getColorByValue(newValue, 0, 100, flipColors);
   element.style.backgroundColor = bgColor;
 }
@@ -62,6 +61,7 @@ document.getElementById("submitButton").addEventListener("click", function (even
 
 const inputField = document.getElementById("userInput");
 const moodElement = document.getElementById("mood");
+const logTable = document.getElementById("logTable");
 
 function submitInput() {
   const eventInput = inputField.value.trim();
@@ -74,7 +74,7 @@ function submitInput() {
       "health": Number(document.getElementById("health").textContent),
       "sanity": Number(document.getElementById("sanity").textContent),
       "happiness": Number(document.getElementById("happiness").textContent),
-      "hunger": Number(document.getElementById("hunger").textContent),
+      "satiety": Number(document.getElementById("satiety").textContent),
       "social": Number(document.getElementById("social").textContent)
     };
 
@@ -88,8 +88,9 @@ function submitInput() {
     })
       .then(response => response.json())
       .then(data => {
+        data.impactEffect = calculateImpactEffect(data.positiveImpact, data.severity);
         updateLogEntry(unixtime, data);
-        updateAttribute(data.affected_attribute, data.amount);
+        updateAttribute(data.affected_attribute, data.impactEffect);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -99,9 +100,15 @@ function submitInput() {
   }
 }
 
-function addLogEntry(id, eventInput) {
-  const table = document.getElementById("logTable");
+function calculateImpactEffect(positiveImpact, severity) {
+  let maxValue = severity * 5;
+  let randomNumber = Math.floor(Math.random() * maxValue);
+  if (randomNumber === 0) randomNumber = 1;
+  if (!positiveImpact) randomNumber *= -1;
+  return randomNumber;
+}
 
+function addLogEntry(id, eventInput) {
   let summaryRow = document.createElement("tr");
   summaryRow.id = `summary-${id}`;
   summaryRow.style.position = "relative";
@@ -110,24 +117,24 @@ function addLogEntry(id, eventInput) {
   summaryCell.textContent = `John ${eventInput}`;
   summaryCell.classList.add("p-4", "text-center", "font-semibold", "bg-grey-600");
   summaryRow.appendChild(summaryCell);
-  table.appendChild(summaryRow);
+  logTable.appendChild(summaryRow);
 
   let detailRow = document.createElement("tr");
   detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400");
   let eventCell = document.createElement("td");
   let thoughtsCell = document.createElement("td");
 
-  eventCell.textContent = "Loading...";
-  thoughtsCell.textContent = "Loading...";
+  eventCell.textContent = "Simulating...";
+  thoughtsCell.textContent = "Simulating...";
 
   eventCell.classList.add("p-4");
   thoughtsCell.classList.add("p-4");
 
   detailRow.appendChild(eventCell);
   detailRow.appendChild(thoughtsCell);
-  table.appendChild(detailRow);
+  logTable.appendChild(detailRow);
 
-  moodElement.textContent = "Determining...";  // Placeholder mood text
+  moodElement.textContent = "Simulating...";
 }
 
 function updateLogEntry(unixtime, data) {
@@ -140,10 +147,7 @@ function updateLogEntry(unixtime, data) {
   imgAttributeType.classList.add("w-8", "h-8", "mr-1");
   const amountSpan = document.createElement("span");
 
-  let positiveChange = data.amount > 0;
-  if (data.affected_attribute === "hunger") positiveChange = !positiveChange;
-
-  if (!positiveChange) {
+  if (!data.positiveImpact) {
     amountSpan.style.color = "#FFFFFF";
     amountSpan.style.backgroundColor = "#FF0000";
   } else {
@@ -151,15 +155,15 @@ function updateLogEntry(unixtime, data) {
     amountSpan.style.backgroundColor = "#00FF00";
   }
   amountSpan.classList.add("px-2", "py-1", "rounded-lg", "text-md", "font-bold", "text-center");
-  amountSpan.textContent = (data.amount > 0) ? `+${data.amount}` : data.amount;
+  amountSpan.textContent = data.positiveImpact ? `+${data.impactEffect}` : data.impactEffect;
   attributeChangeContainer.appendChild(imgAttributeType);
   attributeChangeContainer.appendChild(amountSpan);
   summaryRow.appendChild(attributeChangeContainer);
 
 
   const eventCells = document.querySelectorAll("#logTable td");
-  eventCells[eventCells.length - 2].textContent = data.event_description;  // Update the last event cell
-  eventCells[eventCells.length - 1].textContent = data.inner_thoughts;     // Update the last thoughts cell
+  eventCells[eventCells.length - 2].textContent = data.event_description;
+  eventCells[eventCells.length - 1].textContent = data.inner_thoughts;
   moodElement.textContent = data.mood;
 }
 
@@ -168,10 +172,10 @@ function reset() {
     .then(response => response.json())
     .then(data => {
       updateAttribute("satiety", 100);
-updateAttribute("health", 100);
-updateAttribute("sanity", 100);
-updateAttribute("happiness", 100);
-updateAttribute("social", 100);
+      updateAttribute("health", 100);
+      updateAttribute("sanity", 100);
+      updateAttribute("happiness", 100);
+      updateAttribute("social", 100);
       moodElement.textContent = "Waiting to be instantiated 🫥";
       // Empty the log table
       logTable.innerHTML = "";
