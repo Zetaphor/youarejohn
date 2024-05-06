@@ -10,6 +10,8 @@ app = Flask(__name__)
 
 GPU_LAYERS = -1 if os.environ.get("USE_GPU", "").lower() == "true" else 0
 
+event_log = []
+
 try:
     print('------STARTING MODEL------')
     system_prompt = open("system_prompt.txt", "r").read()
@@ -31,13 +33,49 @@ try:
 except Exception as e:
     abort(500, description=str(e))
 
+# def calculate_prompt_tokens(prepared_prompt):
+#     prepared_prompt_tokens = len(llm.tokenize(system_prompt.encode("utf-8")))
+#     return model['context_length'] - prepared_prompt_tokens
+
+def prepare_context(attribute_data):
+    global event_log
+    prepared_prompt = update_system_prompt(attribute_data)
+    prepared_prompt_tokens = len(llm.tokenize(prepared_prompt.encode("utf-8")))
+
+    while prepared_prompt_tokens > model['context_length']:
+        event_log.pop(0)
+        prepared_prompt = update_system_prompt(attribute_data)
+        prepared_prompt_tokens = len(llm.tokenize(prepared_prompt.encode("utf-8")))
+
+    return prepared_prompt
+
+def update_system_prompt(attribute_data):
+    global system_prompt
+    global event_log
+    prepared_prompt = system_prompt
+    prepared_prompt = prepared_prompt.replace("[health]", str(attribute_data['health']))
+    prepared_prompt = prepared_prompt.replace("[sanity]", str(attribute_data['sanity']))
+    prepared_prompt = prepared_prompt.replace("[happiness]", str(attribute_data['happiness']))
+    prepared_prompt = prepared_prompt.replace("[hunger]", str(attribute_data['hunger']))
+    prepared_prompt = prepared_prompt.replace("[social]", str(attribute_data['social']))
+    event_log_str = "\n".join(["* " + event for event in event_log])
+    prepared_prompt = prepared_prompt.replace("[event_list]", event_log_str)
+
+    # Save the prompt to a file
+    with open("prepared_prompt.txt", "w") as f:
+        f.write(prepared_prompt)
+
+    return prepared_prompt
+
 @app.route('/simulate/', methods=['POST'])
 def simulate():
     user_input = request.json.get('event')
+    attribute_data = request.json.get('attribute_data')
+
     try:
         response = llm.create_chat_completion(
             messages=[
-                {"role": "system", "content": system_prompt},
+                {"role": "system", "content": prepare_context(attribute_data)},
                 {"role": "user", "content": user_input}
             ],
             response_format={
@@ -57,6 +95,9 @@ def simulate():
             temperature=0.7,
         )
         content = json.loads(response['choices'][0]['message']['content'])
+
+        event_log.append(content['event_description'])
+
         return jsonify(content)
     except Exception as e:
         abort(500, description=str(e))

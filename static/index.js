@@ -68,14 +68,23 @@ function submitInput() {
 
   if (eventInput.length > 0) {
     const unixtime = Date.now();
-    console.log(unixtime);
+
+    // Get each attribute value and put it into an object
+    const attributeData = {
+      "health": Number(document.getElementById("health").textContent),
+      "sanity": Number(document.getElementById("sanity").textContent),
+      "happiness": Number(document.getElementById("happiness").textContent),
+      "hunger": Number(document.getElementById("hunger").textContent),
+      "social": Number(document.getElementById("social").textContent)
+    };
+
     addLogEntry(unixtime, eventInput);  // Initially add the entry with placeholders
     fetch('/simulate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ event: eventInput })  // Send the event as JSON
+      body: JSON.stringify({ event: eventInput, attribute_data: attributeData })  // Send the event as JSON
     })
       .then(response => response.json())
       .then(data => {
