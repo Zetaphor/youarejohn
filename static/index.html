@@ -13,41 +13,56 @@
 <body class="bg-gray-100 flex flex-col min-h-screen">
   <header class="container mx-auto min-h-">
     <img class="mx-auto w-32 mb-2 pt-1" src="static/img/logo.png" alt="Logo">
-    <div class="grid grid-cols-5 gap-4 mb-3">
-      <div class="bg-white p-4 shadow rounded">
+
+    <div class="grid grid-cols-5 gap-4 mb-3 rounded p-4">
+      <div>
         <img class="mx-auto w-16" src="static/img/icon_health.png" alt="Health">
         <h2 class="font-semibold text-center">Health</h2>
         <p id="health" class="text-2xl rounded-lg text-center mx-12">100</p>
       </div>
-      <div class="bg-white p-4 shadow rounded">
+      <div>
         <img class="mx-auto w-16" src="static/img/icon_sanity.png" alt="Sanity">
         <h2 class="font-semibold text-center">Sanity</h2>
         <p id="sanity" class="text-2xl text-center rounded-lg mx-12">100</p>
       </div>
-      <div class="bg-white p-4 shadow rounded">
+      <div>
         <img class="mx-auto w-16" src="static/img/icon_happiness.png" alt="Happiness">
         <h2 class="font-semibold text-center">Happiness</h2>
         <p id="happiness" class="text-2xl text-center rounded-lg mx-12">100</p>
       </div>
-      <div class="bg-white p-4 shadow rounded">
+      <div>
         <img class="mx-auto w-16" src="static/img/icon_satiety.png" alt="Satiety">
         <h2 class="font-semibold text-center">Satiety</h2>
         <p id="satiety" class="text-2xl text-center rounded-lg mx-12">0</p>
       </div>
-      <div class="bg-white p-4 shadow rounded">
+      <div>
         <img class="mx-auto w-16" src="static/img/icon_social.png" alt="Social">
         <h2 class="font-semibold text-center">Social</h2>
         <p id="social" class="text-2xl text-center rounded-lg mx-12">100</p>
       </div>
     </div>
+
     <div class="p-4 bg-white border border-gray-300 shadow-sm rounded-md mb-3 text-center">
       <p class="text-gray-700 font-medium text-lg font-semibold mx-auto">Current Mood</p>
       <p id="mood" class="text-gray-700 font-medium text-xl mx-auto">Waiting to be instantiated 🫥</p>
     </div>
   </header>
 
-  <div class="flex-1 overflow-auto container mx-auto mb-8">
-    <div class="bg-white shadow rounded p-4 overflow-hidden">
+  <section>
+    <div class="container mx-auto mb-3 flex justify-center items-center">
+      <div class="p-4 flex items-center space-x-4">
+        <img class="w-12" src="static/img/icon_day.png" alt="Day Icon">
+        <p class="text-gray-700 font-medium text-lg font-semibold">Day 1/100</p>
+      </div>
+      <div class="p-4 flex items-center space-x-4">
+        <img class="w-12" src="static/img/icon_turn.png" alt="Turn Icon">
+        <p class="text-gray-700 font-medium text-lg font-semibold">Turn 1/5</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex-1 overflow-auto container mx-auto mb-8">
+    <div class="bg-white shadow-md rounded p-4 overflow-hidden">
       <table class="min-w-full">
         <thead>
           <tr class="grid grid-cols-2 divide-x divide-gray-400">
@@ -63,10 +78,10 @@
         </table>
       </div>
     </div>
-  </div>
+  </section>
 
   <footer class="container mx-auto mb-4 fixed bottom-0 left-0 right-0">
-    <div class="flex items-center space-x-2 p-4 bg-white border border-gray-300 shadow-sm rounded-md">
+    <div class="flex items-center space-x-2 p-4 bg-white border border-gray-300 shadow-md rounded-md">
       <span class="text-gray-700 font-medium">John</span>
       <input type="text" id="userInput" name="userInput"
         placeholder="performs an action, has a thought, sees something, etc..."
