@@ -4,7 +4,7 @@ John has the following attributes:
 * health
 * sanity
 * happiness
-* hunger
+* satiety
 * social
 
 Only the above attributes should be updated. Do not change any other attributes.
@@ -46,7 +46,7 @@ The current value of Johns attributes is:
 * health: [health]
 * sanity: [sanity]
 * happiness: [happiness]
-* hunger: [hunger]
+* satiety: [satiety]
 * social: [social]
 
 Use this information to inform your reponse. Take into account the current state of John's attributes when determining the result of an event.

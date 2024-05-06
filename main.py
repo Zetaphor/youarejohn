@@ -56,7 +56,7 @@ def update_system_prompt(attribute_data):
     prepared_prompt = prepared_prompt.replace("[health]", str(attribute_data['health']))
     prepared_prompt = prepared_prompt.replace("[sanity]", str(attribute_data['sanity']))
     prepared_prompt = prepared_prompt.replace("[happiness]", str(attribute_data['happiness']))
-    prepared_prompt = prepared_prompt.replace("[hunger]", str(attribute_data['hunger']))
+    prepared_prompt = prepared_prompt.replace("[satiety]", str(attribute_data['satiety']))
     prepared_prompt = prepared_prompt.replace("[social]", str(attribute_data['social']))
     event_log_str = "\n".join(["* " + event for event in event_log])
     prepared_prompt = prepared_prompt.replace("[event_list]", event_log_str)
