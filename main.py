@@ -67,6 +67,13 @@ def update_system_prompt(attribute_data):
 
     return prepared_prompt
 
+# Add a route to reset the event log
+@app.route('/reset/', methods=['GET'])
+def reset():
+    global event_log
+    event_log = []
+    return jsonify({'message': 'Event log reset'})
+
 @app.route('/simulate/', methods=['POST'])
 def simulate():
     user_input = request.json.get('event')

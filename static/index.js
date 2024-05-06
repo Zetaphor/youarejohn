@@ -163,8 +163,19 @@ function updateLogEntry(unixtime, data) {
   moodElement.textContent = data.mood;
 }
 
-updateAttribute("hunger", 0);
+function reset() {
+  fetch('/reset/')
+    .then(response => response.json())
+    .then(data => {
+      updateAttribute("satiety", 100);
 updateAttribute("health", 100);
 updateAttribute("sanity", 100);
 updateAttribute("happiness", 100);
 updateAttribute("social", 100);
+      moodElement.textContent = "Waiting to be instantiated 🫥";
+      // Empty the log table
+      logTable.innerHTML = "";
+    })
+}
+
+document.addEventListener("DOMContentLoaded", reset);
