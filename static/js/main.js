@@ -129,7 +129,7 @@ function addLogEntry(id, eventInput) {
   logTable.appendChild(summaryRow);
 
   let detailRow = document.createElement("tr");
-  detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400", "rounded-b-md", "bg-gray-100");
+  detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400", "rounded-b-md", "bg-gray-100", "font-roboto-flex");
   let eventCell = document.createElement("td");
   let thoughtsCell = document.createElement("td");
 

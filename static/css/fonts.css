@@ -14,10 +14,23 @@
   src: url('../fonts/electrolize-v18-latin-regular.woff2') format('woff2');
 }
 
+/* roboto-flex-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Roboto Flex';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/roboto-flex-v26-latin-regular.woff2') format('woff2');
+}
+
 .font-m-plus {
   font-family: 'M PLUS 1 Code', sans-serif;
 }
 
 .font-electrolize {
   font-family: 'Electrolize', sans-serif;
+}
+
+.font-roboto-flex {
+  font-family: 'Roboto Flex', sans-serif;
 }
