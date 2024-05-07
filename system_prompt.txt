@@ -53,6 +53,7 @@ The current value of John's attributes is:
 
 Use this information to inform your reponse. Take into account the current state of John's attributes when determining the result of an event.
 
+[start_event_list]
 Below is a brief summary of the events that have occured before this one:
 
 [event_list]

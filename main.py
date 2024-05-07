@@ -53,8 +53,14 @@ def update_system_prompt(attribute_data):
     prepared_prompt = prepared_prompt.replace("[sanity]", str(attribute_data['sanity']))
     prepared_prompt = prepared_prompt.replace("[happiness]", str(attribute_data['happiness']))
     prepared_prompt = prepared_prompt.replace("[satiety]", str(attribute_data['satiety']))
-    event_log_str = "\n".join(["* " + event for event in event_log])
-    prepared_prompt = prepared_prompt.replace("[event_list]", event_log_str)
+
+    # Don't include the event list if there are no events
+    if len(event_log) == 0:
+        prepared_prompt = prepared_prompt[:prepared_prompt.find("[start_event_list]")]
+    else:
+        prepared_prompt = prepared_prompt.replace("[start_event_list]\n", "")
+        event_log_str = "\n".join(["* " + event for event in event_log])
+        prepared_prompt = prepared_prompt.replace("[event_list]", event_log_str)
 
     # Save the prompt to a file
     with open("prepared_prompt.txt", "w") as f:
