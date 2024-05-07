@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NarratOS Terminal</title>
-  <link href="tailwind.min.css" rel="stylesheet">
+  <link href="static/tailwind.min.css" rel="stylesheet">
+  <link href="static/fonts.css" rel="stylesheet">
   <style>
     .hidden-image {
       opacity: 0;
@@ -42,12 +43,12 @@
   </style>
 </head>
 
-<body class="bg-gray-100 font-mono flex flex-col items-center justify-center h-screen text-lg">
-  <img src="img/narratos_logo.png" id="osLogo" alt="NarratOS Logo" class="w-64 hidden-image" id="Quantum NarratOS">
+<body class="bg-gray-100 flex flex-col items-center justify-center h-screen text-lg font-m-plus">
+  <img src="static/img/narratos_logo.png" id="osLogo" alt="NarratOS Logo" class="w-64 hidden-image" id="Quantum NarratOS">
   <div class="w-4/5 lg:w-2/3 xl:w-1/2 p-5 overflow-hidden">
     <div id="output" class="whitespace-pre overflow-hidden h-full"></div>
   </div>
-  <img id="startButton" src="img/start_button.png" alt="NarratOS Logo" class="w-40 hidden-image" id="Start Button">
+  <img id="startButton" src="static/img/start_button.png" alt="NarratOS Logo" class="w-40 hidden-image" id="Start Button">
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {

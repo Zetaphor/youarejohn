@@ -33,10 +33,6 @@ try:
 except Exception as e:
     abort(500, description=str(e))
 
-# def calculate_prompt_tokens(prepared_prompt):
-#     prepared_prompt_tokens = len(llm.tokenize(system_prompt.encode("utf-8")))
-#     return model['context_length'] - prepared_prompt_tokens
-
 def prepare_context(attribute_data):
     global event_log
     prepared_prompt = update_system_prompt(attribute_data)
@@ -57,7 +53,6 @@ def update_system_prompt(attribute_data):
     prepared_prompt = prepared_prompt.replace("[sanity]", str(attribute_data['sanity']))
     prepared_prompt = prepared_prompt.replace("[happiness]", str(attribute_data['happiness']))
     prepared_prompt = prepared_prompt.replace("[satiety]", str(attribute_data['satiety']))
-    prepared_prompt = prepared_prompt.replace("[social]", str(attribute_data['social']))
     event_log_str = "\n".join(["* " + event for event in event_log])
     prepared_prompt = prepared_prompt.replace("[event_list]", event_log_str)
 
@@ -113,6 +108,10 @@ def simulate():
 @app.route('/')
 def index():
     return send_from_directory('static', 'index.html')
+
+@app.route('/terminal')
+def terminal():
+    return send_from_directory('static', 'terminal.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, debug=False)
