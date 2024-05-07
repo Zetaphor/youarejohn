@@ -74,8 +74,7 @@ function submitInput() {
       "health": Number(document.getElementById("health").textContent),
       "sanity": Number(document.getElementById("sanity").textContent),
       "happiness": Number(document.getElementById("happiness").textContent),
-      "satiety": Number(document.getElementById("satiety").textContent),
-      "social": Number(document.getElementById("social").textContent)
+      "satiety": Number(document.getElementById("satiety").textContent)
     };
 
     addLogEntry(unixtime, eventInput);  // Initially add the entry with placeholders
@@ -171,11 +170,10 @@ function reset() {
   fetch('/reset/')
     .then(response => response.json())
     .then(data => {
-      // updateAttribute("satiety", 100);
       updateAttribute("health", 100);
       updateAttribute("sanity", 100);
       updateAttribute("happiness", 100);
-      updateAttribute("social", 100);
+      updateAttribute("satiety", 100);
       moodElement.textContent = "Waiting to be instantiated 🫥";
       // Empty the log table
       logTable.innerHTML = "";

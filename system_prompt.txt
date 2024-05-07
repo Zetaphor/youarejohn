@@ -9,7 +9,6 @@ John has the following attributes that should be updated based on the event:
 * sanity
 * happiness
 * satiety
-* social
 
 Only the above attributes should be updated. Do not change any other attributes.
 
@@ -40,11 +39,6 @@ Output: { "affected_attribute": "health", "positiveImpact": "false", "severity":
 
 ---
 
-Input: John calls a friend.
-Output: { "affected_attribute": "social", "positiveImpact": "true", "severity": 3, "mood": "Content 😌", "event_description": "John calls a long-lost friend after years of not speaking.", "inner_thoughts": "It's been so long since I last talked to Mike. It feels great to reconnect." }
-
----
-
 Input: John eats a sandwich.
 Output: { "affected_attribute": "satiety", "positiveImpact": "true", "severity": 1, "mood": "Satisfied 😋", "event_description": "John eats a delicious sandwich.", "inner_thoughts": "I was feeling quite hungry after not having proper meals today. This sandwich is really filling and makes me feel better." }
 
@@ -56,7 +50,6 @@ The current value of John's attributes is:
 * sanity: [sanity]
 * happiness: [happiness]
 * satiety: [satiety]
-* social: [social]
 
 Use this information to inform your reponse. Take into account the current state of John's attributes when determining the result of an event.
 
