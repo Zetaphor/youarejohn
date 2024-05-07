@@ -5,82 +5,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>You Are John</title>
-  <link href="static/tailwind.min.css" rel="stylesheet">
   <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+  <link href="static/tailwind.min.css" rel="stylesheet">
+  <style>
+    .left-border {
+      border-left: 1px solid #333;
+      /* White border to enhance the neon glow */
+      box-shadow: 0 0 8px #333,
+        /* Inner white glow */
+        0 0 5px #84b1ff,
+        /* Primary neon glow, pink in this case */
+        0 0 10px #84b1ff,
+        /* Secondary neon glow, pink in this case */
+        0 0 20px #84b1ff;
+    }
+  </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col min-h-screen">
-  <header class="container mx-auto min-h-">
-    <img class="mx-auto w-32 mb-2 pt-1" src="static/img/logo.png" alt="Logo">
+<body class="min-h-screen flex flex-col bg-gray-400">
+  <div class="flex flex-1">
+    <main class="flex-1 relative">
+      <div class="bg-gray-800 text-white px-2 flex items-center w-full">
+        <div class="flex absolute left-0">
+          <div class="bg-white w-20 rounded-2xl p-2 m-1 ml-4 flex justify-center">
+            <img src="static/img/narratos_logo.png" alt="Logo" class="w-full">
+          </div>
+        </div>
 
-    <div class="grid grid-cols-5 gap-4 mb-3 rounded p-4">
-      <div>
-        <img class="mx-auto w-16" src="static/img/icon_health.png" alt="Health">
-        <h2 class="font-semibold text-center">Health</h2>
-        <p id="health" class="text-2xl rounded-lg text-center mx-12">100</p>
-      </div>
-      <div>
-        <img class="mx-auto w-16" src="static/img/icon_sanity.png" alt="Sanity">
-        <h2 class="font-semibold text-center">Sanity</h2>
-        <p id="sanity" class="text-2xl text-center rounded-lg mx-12">100</p>
-      </div>
-      <div>
-        <img class="mx-auto w-16" src="static/img/icon_happiness.png" alt="Happiness">
-        <h2 class="font-semibold text-center">Happiness</h2>
-        <p id="happiness" class="text-2xl text-center rounded-lg mx-12">100</p>
-      </div>
-      <div>
-        <img class="mx-auto w-16" src="static/img/icon_satiety.png" alt="Satiety">
-        <h2 class="font-semibold text-center">Satiety</h2>
-        <p id="satiety" class="text-2xl text-center rounded-lg mx-12">0</p>
-      </div>
-      <div>
-        <img class="mx-auto w-16" src="static/img/icon_social.png" alt="Social">
-        <h2 class="font-semibold text-center">Social</h2>
-        <p id="social" class="text-2xl text-center rounded-lg mx-12">100</p>
-      </div>
-    </div>
+        <img src="static/img/logo.png" alt="Logo" class="w-20 absolute right-4">
 
-    <div class="p-4 bg-white border border-gray-300 shadow-sm rounded-md mb-3 text-center">
-      <p class="text-gray-700 font-medium text-lg font-semibold mx-auto">Current Mood</p>
-      <p id="mood" class="text-gray-700 font-medium text-xl mx-auto">Waiting to be instantiated 🫥</p>
-    </div>
-  </header>
-
-  <section>
-    <div class="container mx-auto mb-3 flex justify-center items-center">
-      <div class="p-4 flex items-center space-x-4">
-        <img class="w-12" src="static/img/icon_day.png" alt="Day Icon">
-        <p class="text-gray-700 font-medium text-lg font-semibold">Day 1/100</p>
+        <div class="container mb-3 flex justify-center items-center">
+          <div class="px-4 pt-3 flex items-center space-x-4">
+            <img class="w-16" src="static/img/icon_day.png" alt="Day Icon">
+            <p class="text-white font-medium text-lg font-semibold">Day 1/100</p>
+          </div>
+          <div class="px-4 pt-3 flex items-center space-x-4">
+            <img class="w-16" src="static/img/icon_turn.png" alt="Turn Icon">
+            <p class="text-white font-medium text-lg font-semibold">Turn 1/5</p>
+          </div>
+        </div>
       </div>
-      <div class="p-4 flex items-center space-x-4">
-        <img class="w-12" src="static/img/icon_turn.png" alt="Turn Icon">
-        <p class="text-gray-700 font-medium text-lg font-semibold">Turn 1/5</p>
-      </div>
-    </div>
-  </section>
 
-  <section class="flex-1 overflow-auto container mx-auto mb-8">
-    <div class="bg-white shadow-md rounded p-4 overflow-hidden">
-      <table class="min-w-full">
-        <thead>
-          <tr class="grid grid-cols-2 divide-x divide-gray-400">
-            <th class="font-semibold p-4 bg-gray-100 text-center">Event</th>
-            <th class="font-semibold p-4 bg-gray-100 text-center">Thoughts</th>
-          </tr>
-        </thead>
-      </table>
-      <div class="max-h-[300px] overflow-auto min-w-full">
+
+      <div class="bg-gray-500 shadow-md rounded p-4 overflow-hidden">
         <table class="min-w-full">
-          <tbody id="logTable">
-          </tbody>
+          <thead>
+            <tr class="grid grid-cols-2 divide-x divide-gray-400">
+              <th class="font-semibold p-4 bg-gray-100 text-center">Event</th>
+              <th class="font-semibold p-4 bg-gray-100 text-center">Thoughts</th>
+            </tr>
+          </thead>
         </table>
+        <div class="max-h-[300px] overflow-auto min-w-full">
+          <table class="min-w-full">
+            <tbody id="logTable">
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </section>
+    </main>
 
-  <footer class="container mx-auto mb-4 fixed bottom-0 left-0 right-0">
+    <aside class="w-1/6 px-4 bg-gray-600">
+      <div class="grid grid-cols-2 gap-4 mb-3 rounded px-4 pt-2">
+        <div>
+          <img class="mx-auto w-16" src="static/img/icon_health.png" alt="Health">
+          <h2 class="font-bold text-center text-white">Health</h2>
+          <p id="health" class="text-2xl text-center rounded-lg">100</p>
+        </div>
+        <div>
+          <img class="mx-auto w-16" src="static/img/icon_sanity.png" alt="Sanity">
+          <h2 class="font-semibold text-center text-white">Sanity</h2>
+          <p id="sanity" class="text-2xl text-center rounded-lg">100</p>
+        </div>
+        <div>
+          <img class="mx-auto w-16" src="static/img/icon_happiness.png" alt="Happiness">
+          <h2 class="font-semibold text-center text-white">Happiness</h2>
+          <p id="happiness" class="text-2xl text-center rounded-lg">100</p>
+        </div>
+        <div>
+          <img class="mx-auto w-16" src="static/img/icon_social.png" alt="Social">
+          <h2 class="font-semibold text-center text-white">Social</h2>
+          <p id="social" class="text-2xl text-center rounded-lg">100</p>
+        </div>
+      </div>
+
+      <div class="p-4 bg-white border border-gray-300 shadow-sm rounded-md mb-3 text-center">
+        <p class="text-gray-700 font-medium text-lg font-semibold mx-auto">Current Mood</p>
+        <p id="mood" class="text-gray-700 font-medium text-xl mx-auto">Waiting to be instantiated 🫥</p>
+      </div>
+    </aside>
+  </div>
+  <footer class="p-4 bg-gray-800 text-white text-center">
     <div class="flex items-center space-x-2 p-4 bg-white border border-gray-300 shadow-md rounded-md">
       <span class="text-gray-700 font-medium">John</span>
       <input type="text" id="userInput" name="userInput"
