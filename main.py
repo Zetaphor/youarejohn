@@ -109,9 +109,5 @@ def simulate():
 def index():
     return send_from_directory('static', 'index.html')
 
-@app.route('/terminal')
-def terminal():
-    return send_from_directory('static', 'terminal.html')
-
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000, debug=False)

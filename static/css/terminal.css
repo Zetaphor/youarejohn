@@ -1,0 +1,46 @@
+.hidden-item {
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.fade-out {
+  animation: fadeOut 1s ease-in-out forwards;
+}
+
+.rotate {
+  animation: fadeIn 2s ease-in-out forwards, rotate 45s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* Rotation keyframe */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

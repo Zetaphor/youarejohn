@@ -3,7 +3,7 @@
   font-family: 'M PLUS 1 Code';
   font-style: normal;
   font-weight: 400;
-  src: url('fonts/m-plus-1-code-v12-latin-regular.woff2') format('woff2');
+  src: url('../fonts/m-plus-1-code-v12-latin-regular.woff2') format('woff2');
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-family: 'Electrolize';
   font-style: normal;
   font-weight: 400;
-  src: url('fonts/electrolize-v18-latin-regular.woff2') format('woff2');
+  src: url('../fonts/electrolize-v18-latin-regular.woff2') format('woff2');
 }
 
 .font-m-plus {
