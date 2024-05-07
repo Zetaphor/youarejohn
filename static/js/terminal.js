@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
 
+
+
   let currentLine = 0;
   let index = 0;
   let interval = 10;
@@ -43,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  function skipIntro() {
+    mainUI.classList.remove('hidden-item');
+    mainUI.classList.add('fade-in');
+    terminalUI.classList.add('hidden');
+  }
+
   startButton.addEventListener('click', function () {
     mainUI.classList.remove('hidden-item');
     mainUI.classList.add('fade-in');
@@ -51,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
       terminalUI.classList.add('hidden');
     }, 1000);
   });
+
+  skipIntro();
 
   osLogo.classList.remove('hidden-item');
   osLogo.classList.add('fade-in');
