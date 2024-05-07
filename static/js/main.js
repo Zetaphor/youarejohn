@@ -114,13 +114,22 @@ function addLogEntry(id, eventInput) {
   summaryRow.style.position = "relative";
   let summaryCell = document.createElement("td");
   summaryCell.setAttribute("colspan", "2");
-  summaryCell.textContent = `John ${eventInput}`;
-  summaryCell.classList.add("p-4", "text-center", "font-semibold", "bg-grey-600");
+  summaryCell.classList.add("flex", "p-0", "mt-3");
+  let summaryContent = document.createElement("div");
+  summaryContent.textContent = `John ${eventInput}`;
+  summaryContent.classList.add("px-4", "py-2", "text-center", "font-semibold", "bg-gray-100", "rounded-t-md", "display-block", "mx-auto");
+  summaryCell.appendChild(summaryContent);
   summaryRow.appendChild(summaryCell);
+
+  const turnContainer = document.createElement("div");
+  turnContainer.classList.add("absolute", "bottom-0", "left-0", "px-2", "py-1", "bg-gray-100", "rounded-t-md");
+  turnContainer.textContent = 'Day 1, Turn 1';
+  summaryRow.appendChild(turnContainer);
+
   logTable.appendChild(summaryRow);
 
   let detailRow = document.createElement("tr");
-  detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400");
+  detailRow.classList.add("grid", "grid-cols-2", "divide-x", "divide-gray-400", "rounded-b-md", "bg-gray-100");
   let eventCell = document.createElement("td");
   let thoughtsCell = document.createElement("td");
 
@@ -141,13 +150,13 @@ function addLogEntry(id, eventInput) {
 function updateLogEntry(unixtime, data) {
   const summaryRow = document.getElementById("summary-" + unixtime);
   const attributeChangeContainer = document.createElement("div");
-  attributeChangeContainer.classList.add("absolute", "top-0", "right-0", "py-3");
+  attributeChangeContainer.classList.add("absolute", "bottom-0", "right-0", "px-2", "py-1", "bg-gray-100", "rounded-t-md");
   attributeChangeContainer.style.display = "flex";
   imgAttributeType = document.createElement("img");
   imgAttributeType.src = "/static/img/icon_" + data.affected_attribute + ".png";
   imgAttributeType.classList.add("w-8", "h-8", "mr-1");
-  const amountSpan = document.createElement("span");
 
+  const amountSpan = document.createElement("span");
   if (!data.positiveImpact) {
     amountSpan.style.color = "#FFFFFF";
     amountSpan.style.backgroundColor = "#FF0000";
@@ -160,7 +169,6 @@ function updateLogEntry(unixtime, data) {
   attributeChangeContainer.appendChild(imgAttributeType);
   attributeChangeContainer.appendChild(amountSpan);
   summaryRow.appendChild(attributeChangeContainer);
-
 
   const eventCells = document.querySelectorAll("#logTable td");
   eventCells[eventCells.length - 2].textContent = data.event_description;
