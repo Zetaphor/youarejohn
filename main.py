@@ -99,6 +99,10 @@ def simulate():
         )
         content = json.loads(response['choices'][0]['message']['content'])
 
+        # Manually patch up some attribute outputs
+        if (content['affected_attribute'] == 'mood'):
+            content['affected_attribute'] = 'happiness'
+
         event_log.append(content['event_description'])
 
         return jsonify(content)
