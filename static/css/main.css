@@ -5,3 +5,7 @@
     0 0 10px #84b1ff,
     0 0 20px #84b1ff;
 }
+
+.rotate-turn {
+  animation: rotate 2s linear infinite;
+}

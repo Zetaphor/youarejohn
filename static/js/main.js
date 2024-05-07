@@ -62,6 +62,7 @@ document.getElementById("submitButton").addEventListener("click", function (even
 const inputField = document.getElementById("userInput");
 const moodElement = document.getElementById("mood");
 const logTable = document.getElementById("logTable");
+const turnIcon = document.getElementById("turnIcon");
 
 function submitInput() {
   const eventInput = inputField.value.trim();
@@ -123,6 +124,7 @@ function addLogEntry(id, eventInput) {
   let eventCell = document.createElement("td");
   let thoughtsCell = document.createElement("td");
 
+  turnIcon.classList.add("rotate-turn");
   eventCell.textContent = "Simulating...";
   thoughtsCell.textContent = "Simulating...";
 
@@ -164,6 +166,8 @@ function updateLogEntry(unixtime, data) {
   eventCells[eventCells.length - 2].textContent = data.event_description;
   eventCells[eventCells.length - 1].textContent = data.inner_thoughts;
   moodElement.textContent = data.mood;
+
+  turnIcon.classList.remove("rotate-turn");
 }
 
 function reset() {
