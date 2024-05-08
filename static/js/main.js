@@ -1,3 +1,15 @@
+const inputField = document.getElementById("userInput");
+const moodElement = document.getElementById("mood");
+const logTable = document.getElementById("logTable");
+const turnIcon = document.getElementById("turnIcon");
+const dayDisplay = document.getElementById("currentDay");
+const turnDisplay = document.getElementById("currentTurn");
+
+const turnsPerDay = 5;
+const totalDays = 30;
+let currentDay = 1;
+let currentTurn = 1;
+
 /**
  * Generates an RGB color based on the proximity of a value to a defined range.
  * Closer to the minimum yields red, closer to the maximum yields green.
@@ -17,15 +29,12 @@ function getColorByValue(value, min, max, flipColors = false) {
     throw new Error("Value out of range.");
   }
 
-  // Calculate ratio based on the value's position between min and max
   const ratio = (value - min) / (max - min);
 
-  // Determine color intensity based on the ratio
   let red = Math.round(255 * (1 - ratio));
   let green = Math.round(255 * ratio);
   const blue = 0;
 
-  // If flipColors is true, swap the red and green values
   if (flipColors) {
     [red, green] = [green, red];
   }
@@ -45,7 +54,6 @@ function updateAttribute(attribute, value) {
   element.style.backgroundColor = bgColor;
 }
 
-// Event listener for input field to submit on enter
 document.getElementById("userInput").addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
@@ -53,16 +61,10 @@ document.getElementById("userInput").addEventListener("keypress", function (even
   }
 });
 
-// Event listener for the submit button
 document.getElementById("submitButton").addEventListener("click", function (event) {
   event.preventDefault();
   submitInput();
 });
-
-const inputField = document.getElementById("userInput");
-const moodElement = document.getElementById("mood");
-const logTable = document.getElementById("logTable");
-const turnIcon = document.getElementById("turnIcon");
 
 function submitInput() {
   const eventInput = inputField.value.trim();
@@ -70,7 +72,6 @@ function submitInput() {
   if (eventInput.length > 0) {
     const unixtime = Date.now();
 
-    // Get each attribute value and put it into an object
     const attributeData = {
       "health": Number(document.getElementById("health").textContent),
       "sanity": Number(document.getElementById("sanity").textContent),
@@ -78,7 +79,7 @@ function submitInput() {
       "satiety": Number(document.getElementById("satiety").textContent)
     };
 
-    addLogEntry(unixtime, eventInput);  // Initially add the entry with placeholders
+    addLogEntry(unixtime, eventInput);
     fetch('/simulate', {
       method: 'POST',
       headers: {
@@ -123,7 +124,7 @@ function addLogEntry(id, eventInput) {
 
   const turnContainer = document.createElement("div");
   turnContainer.classList.add("absolute", "bottom-0", "left-0", "px-2", "py-1", "bg-gray-100", "rounded-t-md");
-  turnContainer.textContent = 'Day 1, Turn 1';
+  turnContainer.textContent = `Day ${currentDay}, Turn ${currentTurn}`;
   summaryRow.appendChild(turnContainer);
 
   logTable.appendChild(summaryRow);
@@ -145,6 +146,11 @@ function addLogEntry(id, eventInput) {
   logTable.appendChild(detailRow);
 
   moodElement.textContent = "Simulating...";
+  currentTurn++;
+  if (currentTurn > turnsPerDay) {
+    currentTurn = 1;
+    currentDay++;
+  }
 }
 
 function updateLogEntry(unixtime, data) {
@@ -176,6 +182,8 @@ function updateLogEntry(unixtime, data) {
   moodElement.textContent = data.mood;
 
   turnIcon.classList.remove("rotate-turn");
+  dayDisplay.textContent = `${currentDay}/${totalDays}`;
+  turnDisplay.textContent = `${currentTurn}/${turnsPerDay}`;
 }
 
 function reset() {
@@ -186,8 +194,9 @@ function reset() {
       updateAttribute("sanity", 100);
       updateAttribute("happiness", 100);
       updateAttribute("satiety", 100);
+      dayDisplay.textContent = `${currentDay}/${totalDays}`;
+      turnDisplay.textContent = `${currentTurn}/${turnsPerDay}`;
       moodElement.textContent = "Waiting to be instantiated 🫥";
-      // Empty the log table
       logTable.innerHTML = "";
     })
 }
