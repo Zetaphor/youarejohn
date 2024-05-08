@@ -78,6 +78,8 @@ def reset():
 @app.route('/simulate/', methods=['POST'])
 def simulate():
     user_input = request.json.get('event')
+    random_event = bool(request.json.get('random_event'))
+    print('Random event', random_event)
     attribute_data = request.json.get('attribute_data')
 
     try:

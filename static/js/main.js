@@ -1,14 +1,25 @@
+const attrHealth = document.getElementById("health");
+const attrSanity = document.getElementById("sanity");
+const attrHappiness = document.getElementById("happiness");
+const attrSatiety = document.getElementById("satiety");
+
 const inputField = document.getElementById("userInput");
+const submitButton = document.getElementById("submitButton");
 const moodElement = document.getElementById("mood");
 const logTable = document.getElementById("logTable");
+
 const turnIcon = document.getElementById("turnIcon");
 const dayDisplay = document.getElementById("currentDay");
 const turnDisplay = document.getElementById("currentTurn");
 
 const turnsPerDay = 5;
 const totalDays = 30;
+const randomEventEveryN = 1;
 let currentDay = 1;
 let currentTurn = 1;
+
+let disableInputs = false;
+
 
 /**
  * Generates an RGB color based on the proximity of a value to a defined range.
@@ -42,6 +53,11 @@ function getColorByValue(value, min, max, flipColors = false) {
   return `rgb(${red}, ${green}, ${blue})`;
 }
 
+function setInputsDisabled() {
+  inputField.disabled = disableInputs;
+  submitButton.disabled = disableInputs;
+}
+
 
 function updateAttribute(attribute, value) {
   const element = document.getElementById(attribute);
@@ -54,38 +70,48 @@ function updateAttribute(attribute, value) {
   element.style.backgroundColor = bgColor;
 }
 
-document.getElementById("userInput").addEventListener("keypress", function (event) {
+userInput.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
+    disableInputs = true;
+    setInputsDisabled();
     submitInput();
   }
 });
 
-document.getElementById("submitButton").addEventListener("click", function (event) {
+submitButton.addEventListener("click", function (event) {
   event.preventDefault();
+  disableInputs = true;
+  setInputsDisabled();
   submitInput();
 });
 
 function submitInput() {
+  if (inputField.value.length > 0) {
   const eventInput = inputField.value.trim();
+    inputField.value = "";
+    simulate(eventInput, false);
+  }
+}
 
-  if (eventInput.length > 0) {
+function simulate(input, randomEvent = false) {
     const unixtime = Date.now();
 
     const attributeData = {
-      "health": Number(document.getElementById("health").textContent),
-      "sanity": Number(document.getElementById("sanity").textContent),
-      "happiness": Number(document.getElementById("happiness").textContent),
-      "satiety": Number(document.getElementById("satiety").textContent)
+    "health": Number(attrHealth.textContent),
+    "sanity": Number(attrSanity.textContent),
+    "happiness": Number(attrHappiness.textContent),
+    "satiety": Number(attrSatiety.textContent)
     };
 
-    addLogEntry(unixtime, eventInput);
+  addLogEntry(unixtime, input, randomEvent);
+
     fetch('/simulate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ event: eventInput, attribute_data: attributeData })  // Send the event as JSON
+    body: JSON.stringify({ event: input, attribute_data: attributeData, random_event: randomEvent })  // Send the event as JSON
     })
       .then(response => response.json())
       .then(data => {
@@ -96,8 +122,13 @@ function submitInput() {
       .catch(error => {
         console.error('Error:', error);
       });
+}
 
-    inputField.value = "";
+function checkRandomEvent() {
+  if (currentTurn % randomEventEveryN === 0) {
+    const eventInput = "random event";
+    console.log('RANDOM EVENT');
+    simulate(eventInput, true);
   }
 }
 
@@ -109,7 +140,7 @@ function calculateImpactEffect(positiveImpact, severity) {
   return randomNumber;
 }
 
-function addLogEntry(id, eventInput) {
+function addLogEntry(id, eventInput, randomEvent=false) {
   let summaryRow = document.createElement("tr");
   summaryRow.id = `summary-${id}`;
   summaryRow.style.position = "relative";
@@ -184,6 +215,9 @@ function updateLogEntry(unixtime, data) {
   turnIcon.classList.remove("rotate-turn");
   dayDisplay.textContent = `${currentDay}/${totalDays}`;
   turnDisplay.textContent = `${currentTurn}/${turnsPerDay}`;
+
+  disableInputs = false;
+  setInputsDisabled();
 }
 
 function reset() {
