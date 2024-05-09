@@ -15,6 +15,9 @@ event_log = []
 try:
     print('------STARTING MODEL------')
     system_prompt = open("system_prompt.txt", "r").read()
+    system_temperature = float(os.environ.get("SYSTEM_TEMPERATURE", 0.7))
+    event_prompt = open("event_prompt.txt", "r").read()
+    event_temperature = float(os.environ.get("EVENT_TEMPERATURE", 0.7))
     models = {
         "llama3": {
             "chat_format": "llama-3",
@@ -27,13 +30,13 @@ try:
             "context_length": 4096
         }
     }
-    model = models["phi3"]
+    model = models[os.environ.get("MODEL", "phi3")]
     llm = Llama(model["file"], n_gpu_layers=GPU_LAYERS, chat_format=model["chat_format"], n_ctx=model["context_length"], flash_attn=True)
 
 except Exception as e:
     abort(500, description=str(e))
 
-def prepare_context(attribute_data):
+def prepare_system_context(attribute_data):
     global event_log
     prepared_prompt = update_system_prompt(attribute_data)
     prepared_prompt_tokens = len(llm.tokenize(prepared_prompt.encode("utf-8")))
@@ -68,6 +71,9 @@ def update_system_prompt(attribute_data):
 
     return prepared_prompt
 
+def prepare_random_event(attribute_data):
+    return event_prompt
+
 # Add a route to reset the event log
 @app.route('/reset/', methods=['GET'])
 def reset():
@@ -79,13 +85,20 @@ def reset():
 def simulate():
     user_input = request.json.get('event')
     random_event = bool(request.json.get('random_event'))
-    print('Random event', random_event)
     attribute_data = request.json.get('attribute_data')
 
     try:
+        if random_event:
+            prepared_prompt = prepare_random_event(attribute_data)
+            prepared_temperature = event_temperature
+        else:
+            prepared_prompt = prepare_system_context(attribute_data)
+            prepared_temperature = system_temperature
+
         response = llm.create_chat_completion(
+            temperature=prepared_temperature,
             messages=[
-                {"role": "system", "content": prepare_context(attribute_data)},
+                {"role": "system", "content": prepared_prompt},
                 {"role": "user", "content": user_input}
             ],
             response_format={
@@ -102,8 +115,7 @@ def simulate():
                     },
                     "required": ["affected_attribute", "positiveImpact", "severity", "mood", "event_description", "inner_thoughts"],
                 },
-            },
-            temperature=0.7,
+            }
         )
         content = json.loads(response['choices'][0]['message']['content'])
 

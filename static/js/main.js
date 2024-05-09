@@ -126,6 +126,8 @@ function simulate(input, randomEvent = false) {
 
 function checkRandomEvent() {
   if (currentTurn % randomEventEveryN === 0) {
+    disableInputs = false;
+    setInputsDisabled();
     const eventInput = "random event";
     console.log('RANDOM EVENT');
     simulate(eventInput, true);
